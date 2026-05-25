@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>[PA-bot10] WD-007 Guide-Attribution Dumbbell (MOCK)</title>
+<style>
+  html, body { margin:0; padding:0; background:#fff; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #1d2330; height:100%; overflow:hidden; }
+  .mock-banner { background:#fff7ed; border-bottom:1px solid #fed7aa; color:#9a3412; font-size:11px; padding:4px 10px; line-height:1.3; }
+  .mock-banner b { color:#7c2d12; }
+  #chart { width:100%; height: calc(100% - 30px); }
+</style>
+</head>
+<body>
+<div class="mock-banner">
+  <b>CUSTOM-BUILT MOCK — needed: OA C10 (object-level guide attribution).</b>
+  Open Enrollment by business unit: completion % with vs without seeing the guide. Lift per BU should be the headline metric.
+</div>
+<div id="chart"></div>
+<script src="https://code.highcharts.com/12/highcharts.js"></script>
+<script src="https://code.highcharts.com/12/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/12/modules/dumbbell.js"></script>
+<script src="https://code.highcharts.com/12/modules/accessibility.js"></script>
+<script>
+const COLORS = { green: '#059669', slate: '#94A3B8' };
+Highcharts.chart('chart', {
+  chart: { type: 'dumbbell', inverted: true, height: 290, backgroundColor: '#fff', style: { fontFamily: 'Inter' } },
+  title: { text: 'Guide lift — % completed OE enrollment', style: { fontSize: '13px', fontWeight: '600' } },
+  credits: { enabled: false },
+  xAxis: {
+    categories: ['BU-1 (Field Ops)','BU-2 (Corp)','BU-3 (Mfg)','BU-4 (Sales)','BU-5 (R&D)','BU-6 (HR)'],
+    title: null,
+    labels: { style: { color: '#475569', fontSize: '10px', fontWeight: '500' } }
+  },
+  yAxis: { title: { text: '% completed', style: { color: '#475569', fontSize: '10px' } }, max: 100,
+    labels: { style: { color: '#6b7280', fontSize: '10px' } },
+    gridLineColor: '#e5e7eb', gridLineDashStyle: 'Dash'
+  },
+  legend: { align: 'right', verticalAlign: 'top', itemStyle: { fontSize: '10px' } },
+  tooltip: {
+    shared: true,
+    headerFormat: '<b>{point.x}</b><br/>',
+    pointFormat: 'Baseline (no guide): {point.low}%<br/>Saw guide: {point.high}%'
+  },
+  series: [{
+    name: 'Baseline → Saw guide',
+    data: [
+      { low: 58, high: 76 }, { low: 64, high: 80 }, { low: 53, high: 82 },
+      { low: 71, high: 85 }, { low: 66, high: 88 }, { low: 62, high: 81 }
+    ],
+    lowColor: COLORS.slate, color: COLORS.green,
+    marker: { fillColor: COLORS.green, radius: 5 }, lowMarker: { fillColor: COLORS.slate, radius: 5 }
+  }]
+});
+</script>
+</body>
+</html>

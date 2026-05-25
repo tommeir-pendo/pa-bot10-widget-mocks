@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>[PA-bot10] Quote-Approval Step Volume (real data)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  html, body { margin:0; padding:0; background:#fff; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #1d2330; height:100%; overflow:hidden; }
+  .real-banner { background:#f0fdf4; border-bottom:1px solid #bbf7d0; color:#065f46; font-size:11px; padding:4px 10px; line-height:1.3; }
+  .real-banner b { color:#064e3b; }
+  #chart { width:100%; height: calc(100% - 30px); }
+</style>
+</head>
+<body>
+<div class="real-banner">
+  <b>REAL DATA · last 30 days · n=9,736 events · 12 quote-side steps</b>
+  Source: Pendo featureEvents on <code>[DD-bot8] Quote-side</code> tags. Median-eventTime correlation across steps was deferred — viz shows per-step volume instead.
+</div>
+<div id="chart"></div>
+<script src="https://code.highcharts.com/12/highcharts.js"></script>
+<script src="https://code.highcharts.com/12/modules/accessibility.js"></script>
+<script>
+const CATS = ["Opp Path Step Click","Opp Mark Stage Complete","Change Owner","Submit for Approval","SF Submit for Approval (bot7)","Order Form Click","Amend Contract","Quote Preview Approval","Quote New Case","Edit Other Additional Terms","Contractual Shift","Click to Send Ironclad"];
+const EVENTS = [2504,2430,2100,702,701,473,311,243,93,83,52,44];
+const VISITORS = [104,98,118,105,105,36,90,76,47,8,20,13];
+
+Highcharts.chart('chart', {
+  chart: { type: 'bar', backgroundColor: '#fff', height: 290, spacingTop: 6, style: { fontFamily: 'Inter' } },
+  title: { text: 'Quote-side feature events — last 30d (top 12)', style: { fontSize: '13px', fontWeight: '600', color:'#1d2330' } },
+  subtitle: { text: 'Bar length = event count · color shaded by event count percentile', style: {fontSize:'10px', color:'#6b7280'} },
+  credits: { enabled: false },
+  legend: { enabled: false },
+  xAxis: { categories: CATS, labels: { style: { color: '#475569', fontSize: '10px' } } },
+  yAxis: {
+    title: { text: 'Events (30d)', style: { color: '#6b7280', fontSize: '10px' } },
+    gridLineColor: '#e5e7eb', gridLineDashStyle: 'Dash',
+    labels: { style: { color: '#6b7280', fontSize: '10px' } }
+  },
+  tooltip: {
+    useHTML: true,
+    headerFormat: '<b>{point.key}</b><br>',
+    pointFormat: 'Events: {point.y}<br>Distinct visitors: {point.visitors}'
+  },
+  plotOptions: {
+    bar: {
+      borderRadius: 3, borderWidth: 0,
+      dataLabels: { enabled: true, format: '{y}', style: { fontSize: '10px', fontWeight: '500', color: '#0f172a', textOutline: 'none' } }
+    }
+  },
+  colors: ['#7B1FA2'],
+  series: [{
+    name: 'Events',
+    data: CATS.map((c,i) => {
+      const v = EVENTS[i];
+      let color = '#E9D5FF';
+      if (v >= 1500) color = '#5A1480';
+      else if (v >= 500) color = '#7B1FA2';
+      else if (v >= 200) color = '#A855F7';
+      else if (v >= 80) color = '#C084FC';
+      return { y: v, visitors: VISITORS[i], color: color };
+    })
+  }]
+});
+</script>
+</body>
+</html>

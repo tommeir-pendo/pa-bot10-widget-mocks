@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>[PA-bot10] HD-003 Cross-App Journey (MOCK)</title>
+<style>
+  html, body { margin:0; padding:0; background:#fff; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #1d2330; height:100%; overflow:hidden; }
+  .mock-banner { background:#fff7ed; border-bottom:1px solid #fed7aa; color:#9a3412; font-size:11px; padding:4px 10px; line-height:1.3; }
+  .mock-banner b { color:#7c2d12; }
+  #chart { width:100%; height: calc(100% - 30px); }
+</style>
+</head>
+<body>
+<div class="mock-banner">
+  <b>CUSTOM-BUILT MOCK — needed: OA C9 (cross-app object identity).</b>
+  Home Depot store associate task: Workday → Email → HD POS → Service Hub. No join key across apps today — mock fabricates the timing.
+</div>
+<div id="chart"></div>
+<script src="https://code.highcharts.com/12/highcharts.js"></script>
+<script src="https://code.highcharts.com/12/modules/xrange.js"></script>
+<script src="https://code.highcharts.com/12/modules/accessibility.js"></script>
+<script>
+const COLORS = { purple: '#7B1FA2', slate: '#94A3B8', pink: '#FF4876', green: '#059669' };
+Highcharts.chart('chart', {
+  chart: { type: 'xrange', height: 290, backgroundColor: '#fff', style: { fontFamily: 'Inter' } },
+  title: { text: 'HD-003 store-associate cross-app journey (4 tasks)', style: { fontSize: '13px', fontWeight: '600' } },
+  credits: { enabled: false },
+  xAxis: { type: 'datetime', title: { text: 'Minutes since task assigned', style: { fontSize: '10px', color: '#475569' } } },
+  yAxis: {
+    categories: ['Task-A491 (Store 412)', 'Task-A487 (Store 88)', 'Task-A480 (Store 203)', 'Task-A476 (Store 412)'],
+    title: null, reversed: true,
+    labels: { style: { color: '#475569', fontSize: '10px', fontWeight: '500' } }
+  },
+  legend: { align: 'right', verticalAlign: 'top', itemStyle: { fontSize: '10px' } },
+  tooltip: { useHTML: true, pointFormat: '<b>{point.app}</b><br/>{point.action}<br/>{point.duration}' },
+  series: [
+    { name: 'Workday (task assignment)', color: COLORS.purple, data: [
+        { x: 0, x2: 60000,  y: 0, app: 'Workday', action: 'Task assigned', duration: '1m' },
+        { x: 0, x2: 60000,  y: 1, app: 'Workday', action: 'Task assigned', duration: '1m' },
+        { x: 0, x2: 60000,  y: 2, app: 'Workday', action: 'Task assigned', duration: '1m' },
+        { x: 0, x2: 60000,  y: 3, app: 'Workday', action: 'Task assigned', duration: '1m' } ] },
+    { name: 'Email notification gap', color: COLORS.slate, data: [
+        { x: 60000,  x2: 360000,  y: 0, app: 'Email', action: 'Notification → acknowledgment', duration: '5m' },
+        { x: 60000,  x2: 240000,  y: 1, app: 'Email', action: 'Notification → acknowledgment', duration: '3m' },
+        { x: 60000,  x2: 720000,  y: 2, app: 'Email', action: 'Notification → acknowledgment', duration: '11m' },
+        { x: 60000,  x2: 180000,  y: 3, app: 'Email', action: 'Notification → acknowledgment', duration: '2m' } ] },
+    { name: 'Home Depot POS (action)', color: COLORS.pink, data: [
+        { x: 360000, x2: 540000,  y: 0, app: 'HD POS', action: 'Action executed at register', duration: '3m' },
+        { x: 240000, x2: 420000,  y: 1, app: 'HD POS', action: 'Action executed at register', duration: '3m' },
+        { x: 720000, x2: 900000,  y: 2, app: 'HD POS', action: 'Action executed at register', duration: '3m' },
+        { x: 180000, x2: 360000,  y: 3, app: 'HD POS', action: 'Action executed at register', duration: '3m' } ] },
+    { name: 'Service Hub (closure)', color: COLORS.green, data: [
+        { x: 540000, x2: 684000,  y: 0, app: 'Service Hub', action: 'Task closed', duration: '2.4m' },
+        { x: 420000, x2: 510000,  y: 1, app: 'Service Hub', action: 'Task closed', duration: '1.5m' },
+        { x: 900000, x2: 1080000, y: 2, app: 'Service Hub', action: 'Task closed', duration: '3m'   },
+        { x: 360000, x2: 480000,  y: 3, app: 'Service Hub', action: 'Task closed', duration: '2m'   } ] }
+  ]
+});
+</script>
+</body>
+</html>

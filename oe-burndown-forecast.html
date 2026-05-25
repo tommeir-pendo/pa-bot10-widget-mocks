@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>[PA-bot10] WD-007 OE Burndown w/ Forecast (MOCK)</title>
+<style>
+  html, body { margin:0; padding:0; background:#fff; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #1d2330; height:100%; overflow:hidden; }
+  .mock-banner { background:#fff7ed; border-bottom:1px solid #fed7aa; color:#9a3412; font-size:11px; padding:4px 10px; line-height:1.3; }
+  .mock-banner b { color:#7c2d12; }
+  #chart { width:100%; height: calc(100% - 30px); }
+</style>
+</head>
+<body>
+<div class="mock-banner">
+  <b>CUSTOM-BUILT MOCK — needed: OA C7 (object state) + C8 (multi-tier baseline).</b>
+  Workday Open Enrollment burndown — at-risk count vs target trajectory. Forecast (dotted red) shows current pace would miss deadline by 1,200.
+</div>
+<div id="chart"></div>
+<script src="https://code.highcharts.com/12/highcharts.js"></script>
+<script src="https://code.highcharts.com/12/modules/accessibility.js"></script>
+<script>
+const COLORS = { purple: '#7B1FA2', green: '#059669', red: '#DC2626' };
+Highcharts.chart('chart', {
+  chart: { type: 'areaspline', height: 290, backgroundColor: '#fff', style: { fontFamily: 'Inter' } },
+  title: { text: 'Open Enrollment — burndown to deadline', style: { fontSize: '13px', fontWeight: '600' } },
+  credits: { enabled: false },
+  xAxis: {
+    categories: ['D-30','D-27','D-24','D-21','D-18','D-15','D-12','D-9','D-6','D-3','D0'],
+    labels: { style: { color: '#475569', fontSize: '10px' } }
+  },
+  yAxis: {
+    title: { text: 'Enrollments remaining', style: { color: '#475569', fontSize: '10px' } },
+    min: 0, max: 14000,
+    labels: { style: { color: '#6b7280', fontSize: '10px' } },
+    gridLineColor: '#e5e7eb', gridLineDashStyle: 'Dash'
+  },
+  legend: { align: 'right', verticalAlign: 'top', itemStyle: { fontSize: '10px' } },
+  tooltip: { shared: true },
+  plotOptions: {
+    areaspline: { fillOpacity: 0.15, marker: { enabled: true, radius: 3 }, lineWidth: 2.5 }
+  },
+  series: [
+    { name: 'Target burndown', data: [14000, 12600, 11200, 9800, 8400, 7000, 5600, 4200, 2800, 1400, 0], color: COLORS.green, dashStyle: 'Dash' },
+    { name: 'Actual', data: [14000, 12800, 11800, 10700, 9600, 8500, null, null, null, null, null], color: COLORS.purple, lineWidth: 3 },
+    { name: 'Forecast — would miss by 1,200', data: [null, null, null, null, null, 8500, 7400, 6300, 5200, 4100, 1200], color: COLORS.red, dashStyle: 'ShortDot' }
+  ]
+});
+</script>
+</body>
+</html>

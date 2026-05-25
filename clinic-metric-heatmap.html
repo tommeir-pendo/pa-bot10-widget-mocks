@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>[PA-bot10] DAVITA Clinic × Metric Heatmap (MOCK)</title>
+<style>
+  html, body { margin:0; padding:0; background:#fff; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #1d2330; height:100%; overflow:hidden; }
+  .mock-banner { background:#fff7ed; border-bottom:1px solid #fed7aa; color:#9a3412; font-size:11px; padding:4px 10px; line-height:1.3; }
+  .mock-banner b { color:#7c2d12; }
+  #chart { width:100%; height: calc(100% - 30px); }
+</style>
+</head>
+<body>
+<div class="mock-banner">
+  <b>CUSTOM-BUILT MOCK — needed: OA C6 (clinic metadata) + C11 (replay drill linkage).</b>
+  DAVITA rounding adherence — missed-metric counts per clinic. Cell click should open replay reel filtered to that clinic's misses.
+</div>
+<div id="chart"></div>
+<script src="https://code.highcharts.com/12/highcharts.js"></script>
+<script src="https://code.highcharts.com/12/modules/heatmap.js"></script>
+<script src="https://code.highcharts.com/12/modules/accessibility.js"></script>
+<script>
+const clinics = ['Clinic-1','Clinic-2','Clinic-3','Clinic-4','Clinic-5','Clinic-6'];
+const metrics = ['Vaccination','Fluid Mgmt','Vitals','Med Reconc','Patient Ed'];
+const data = [
+  [0,0,18],[0,1,4],[0,2,8],[0,3,12],[0,4,7],
+  [1,0,22],[1,1,2],[1,2,6],[1,3,9],[1,4,11],
+  [2,0,31],[2,1,3],[2,2,14],[2,3,18],[2,4,16],
+  [3,0,28],[3,1,5],[3,2,10],[3,3,16],[3,4,9],
+  [4,0,11],[4,1,1],[4,2,4],[4,3,7],[4,4,5],
+  [5,0,7],[5,1,2],[5,2,3],[5,3,5],[5,4,4]
+];
+Highcharts.chart('chart', {
+  chart: { type: 'heatmap', height: 290, backgroundColor: '#fff', style: { fontFamily: 'Inter' } },
+  title: { text: 'Missed rounding metrics by clinic (last 7 days)', style: { fontSize: '13px', fontWeight: '600' } },
+  credits: { enabled: false },
+  xAxis: { categories: clinics, labels: { style: { color: '#475569', fontSize: '10px' } } },
+  yAxis: { categories: metrics, title: null, reversed: true, labels: { style: { color: '#475569', fontSize: '10px', fontWeight: '500' } } },
+  colorAxis: { min: 0, minColor: '#F3E8FF', maxColor: '#DC2626' },
+  legend: { align: 'right', verticalAlign: 'middle', layout: 'vertical', symbolWidth: 10, itemStyle: { fontSize: '10px' } },
+  tooltip: { headerFormat: '', pointFormat: '<b>{point.value}</b> misses · {series.xAxis.categories.(point.x)} · {series.yAxis.categories.(point.y)}' },
+  series: [{
+    name: 'Missed metric count', borderWidth: 1, borderColor: '#fff',
+    data: data,
+    dataLabels: { enabled: true, color: '#1F2937', style: { fontSize: '11px', textOutline: 'none', fontWeight: '500' } }
+  }]
+});
+</script>
+</body>
+</html>

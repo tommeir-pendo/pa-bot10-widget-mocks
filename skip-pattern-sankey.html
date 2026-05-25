@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>[PA-bot10] CONCUR-001 Skip-Pattern Sankey (MOCK)</title>
+<style>
+  html, body { margin:0; padding:0; background:#fff; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color: #1d2330; height:100%; overflow:hidden; }
+  .mock-banner { background:#fff7ed; border-bottom:1px solid #fed7aa; color:#9a3412; font-size:11px; padding:4px 10px; line-height:1.3; }
+  .mock-banner b { color:#7c2d12; }
+  #chart { width:100%; height: calc(100% - 30px); }
+</style>
+</head>
+<body>
+<div class="mock-banner">
+  <b>CUSTOM-BUILT MOCK — needed: OA C6 (object metadata) + sankey widget type.</b>
+  Concur expense reports: 142/730 skip the canonical receipt-upload step. Deviation classification needs C6 metadata.
+</div>
+<div id="chart"></div>
+<script src="https://code.highcharts.com/12/highcharts.js"></script>
+<script src="https://code.highcharts.com/12/modules/sankey.js"></script>
+<script src="https://code.highcharts.com/12/modules/accessibility.js"></script>
+<script>
+const COLORS = { purple: '#7B1FA2', pink: '#FF4876', green: '#059669', amber: '#D97706', red: '#DC2626' };
+Highcharts.chart('chart', {
+  chart: { type: 'sankey', height: 290, backgroundColor: '#fff', style: { fontFamily: 'Inter' } },
+  title: { text: 'Expense report flow — adherence vs skip', style: { fontSize: '13px', fontWeight: '600' } },
+  credits: { enabled: false },
+  tooltip: { headerFormat: '', pointFormat: '<b>{point.fromNode.id}</b> → <b>{point.toNode.id}</b><br>{point.weight} reports' },
+  series: [{
+    type: 'sankey',
+    name: 'Expense flow',
+    nodes: [
+      { id: 'Report Created', color: COLORS.purple },
+      { id: 'Receipt Upload (canonical)', color: COLORS.green },
+      { id: 'Receipt SKIPPED', color: COLORS.red },
+      { id: 'Itemize', color: '#A039C7' },
+      { id: 'Submit', color: COLORS.pink },
+      { id: 'Approval', color: '#10B981' },
+      { id: 'Sent back for correction', color: COLORS.amber },
+      { id: 'Approved with deviation', color: COLORS.red }
+    ],
+    data: [
+      ['Report Created', 'Receipt Upload (canonical)', 588],
+      ['Report Created', 'Receipt SKIPPED', 142],
+      ['Receipt Upload (canonical)', 'Itemize', 588],
+      ['Receipt SKIPPED', 'Itemize', 142],
+      ['Itemize', 'Submit', 720],
+      ['Submit', 'Approval', 538],
+      ['Submit', 'Sent back for correction', 127],
+      ['Sent back for correction', 'Approval', 87],
+      ['Sent back for correction', 'Approved with deviation', 40],
+      ['Submit', 'Approved with deviation', 55]
+    ],
+    nodeWidth: 12,
+    linkOpacity: 0.45,
+    dataLabels: { style: { fontSize: '10px', fontWeight: '500', color: '#0f172a', textOutline: 'none' } }
+  }]
+});
+</script>
+</body>
+</html>
