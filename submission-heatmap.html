@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Deal Desk — Week × Hour Submission Heatmap</title>
+<style>
+  html, body { margin:0; padding:0; background:#fff; font-family:Inter,-apple-system,Segoe UI,sans-serif; color:#1d2330; height:100%; overflow:hidden; }
+  .mock-banner { background:#fff7ed; border-bottom:1px solid #fed7aa; color:#9a3412; font-size:11px; padding:4px 10px; line-height:1.3; }
+  .mock-banner b { color:#7c2d12; }
+  #chart { width:100%; height: calc(100% - 30px); }
+</style>
+</head>
+<body>
+<div class="mock-banner">
+  <b>CUSTOM-BUILT MOCK — not connected to live data.</b>
+  Pendo has no native heatmap widget. To wire live: process <code>Submit for Approval</code> feature-tag events by day-of-week × hour-of-day from raw event timestamps.
+</div>
+<div id="chart"></div>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/heatmap.js"></script>
+<script>
+// 7 days × 24 hours = 168 cells. Mock plausible submission volumes.
+// Pattern: weekdays 9a-5p peak, M/T low, W/Th rise, Friday + EOM clustered late afternoon.
+const data = [];
+const weekdays = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const baseProfile = [0,0,0,0,0,0, 1,2,4,8,12,16,18,22,20,24,28,26,18,10,5,3,2,1]; // hourly profile
+for (let d=0; d<7; d++) {
+  const dayMult = [0.7,0.9,1.1,1.2,1.4,0.2,0.1][d];
+  for (let h=0; h<24; h++) {
+    const v = Math.round(baseProfile[h] * dayMult + (Math.random()*3));
+    data.push([h, d, v]);
+  }
+}
+Highcharts.chart('chart', {
+  chart: { type: 'heatmap', backgroundColor: '#fff', height: 290, marginTop: 40, marginBottom: 50, style: { fontFamily: 'Inter' } },
+  title: { text: 'Submit for Approval — day × hour heatmap (mock, last 90d)', style: { fontSize: '13px', fontWeight: '600' } },
+  credits: { enabled: false },
+  xAxis: { categories: ['12a','1a','2a','3a','4a','5a','6a','7a','8a','9a','10a','11a','12p','1p','2p','3p','4p','5p','6p','7p','8p','9p','10p','11p'], labels: { style: { fontSize: '9px' } } },
+  yAxis: { categories: weekdays, title: null, reversed: true, labels: { style: { fontSize: '10px' } } },
+  colorAxis: { min: 0, minColor: '#f3e8ff', maxColor: '#7B1FA2' },
+  legend: { align: 'right', layout: 'vertical', verticalAlign: 'middle', y: 10, symbolHeight: 200, itemStyle: { fontSize: '10px' } },
+  tooltip: { formatter: function() { return `<b>${weekdays[this.point.y]} ${this.series.xAxis.categories[this.point.x]}</b><br>${this.point.value} submissions`; } },
+  series: [{
+    name: 'Submits',
+    borderWidth: 1,
+    borderColor: '#fff',
+    data: data,
+    dataLabels: { enabled: false }
+  }]
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Deal Desk — Approver Bottleneck Table</title>
+<style>
+  html, body { margin:0; padding:0; background:#fff; font-family:Inter,-apple-system,Segoe UI,sans-serif; color:#1d2330; height:100%; }
+  .mock-banner { background:#fff7ed; border-bottom:1px solid #fed7aa; color:#9a3412; font-size:11px; padding:4px 10px; line-height:1.3; }
+  .mock-banner b { color:#7c2d12; }
+  .wrap { padding: 8px 12px; height: calc(100% - 30px); overflow:auto; }
+  h2 { font-size:13px; margin:0 0 6px; color:#1d2330; }
+  .sub { font-size:11px; color:#6b7280; margin:0 0 8px; }
+  table { width:100%; border-collapse:collapse; font-size:11px; }
+  th, td { padding:5px 8px; text-align:left; border-bottom:1px solid #e5e7eb; }
+  th { background:#f9fafb; font-weight:600; color:#374151; font-size:10px; text-transform:uppercase; letter-spacing:0.4px; }
+  .num { text-align:right; font-variant-numeric: tabular-nums; }
+  .pill { display:inline-block; padding:2px 8px; border-radius:10px; font-size:10px; font-weight:600; }
+  .green  { background:#d1fae5; color:#065f46; }
+  .yellow { background:#fef3c7; color:#92400e; }
+  .red    { background:#fecaca; color:#7f1d1d; }
+  tr.bottleneck { background:#fef2f2; }
+  .footnote { font-size:10px; color:#6b7280; margin-top:8px; padding:6px 8px; background:#f9fafb; border-left:3px solid #FF4876; }
+</style>
+</head>
+<body>
+<div class="mock-banner">
+  <b>CUSTOM-BUILT MOCK — not connected to live data.</b>
+  Median response time per approver tier. To wire live: SOQL <code>ProcessInstanceStep</code> join + <code>approver-tier-map.csv</code> per
+  <code>sf-soql-join-workaround.md</code>.
+</div>
+<div class="wrap">
+  <h2>Approver bottleneck — median response time by tier</h2>
+  <p class="sub">Last 30 days · 1,097 approval cycles · status thresholds: &lt;8h healthy / 8-12h watch / &gt;12h bottleneck</p>
+  <table>
+    <thead><tr>
+      <th>Tier</th><th class="num">Responders</th><th class="num">Median (h)</th><th class="num">P90 (h)</th><th class="num">Active queue</th><th>Status</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>Direct Manager</td><td class="num">124</td><td class="num">2.8</td><td class="num">6.2</td><td class="num">14</td><td><span class="pill green">healthy</span></td></tr>
+      <tr><td>AVP</td><td class="num">38</td><td class="num">4.1</td><td class="num">9.8</td><td class="num">9</td><td><span class="pill green">healthy</span></td></tr>
+      <tr><td>Deal Desk</td><td class="num">8</td><td class="num">3.4</td><td class="num">8.1</td><td class="num">7</td><td><span class="pill green">healthy</span></td></tr>
+      <tr><td>TAM</td><td class="num">14</td><td class="num">4.8</td><td class="num">10.2</td><td class="num">5</td><td><span class="pill green">healthy</span></td></tr>
+      <tr><td>Professional Services</td><td class="num">9</td><td class="num">5.6</td><td class="num">11.5</td><td class="num">4</td><td><span class="pill green">healthy</span></td></tr>
+      <tr><td>VP</td><td class="num">22</td><td class="num">6.8</td><td class="num">14.2</td><td class="num">6</td><td><span class="pill yellow">watch</span></td></tr>
+      <tr><td>Finance</td><td class="num">6</td><td class="num">12.1</td><td class="num">24.2</td><td class="num">3</td><td><span class="pill yellow">watch</span></td></tr>
+      <tr class="bottleneck"><td><b>RLT</b></td><td class="num">11</td><td class="num"><b>18.4</b></td><td class="num">38.1</td><td class="num">4</td><td><span class="pill red">bottleneck</span></td></tr>
+      <tr class="bottleneck"><td><b>CEO/CFO</b></td><td class="num">4</td><td class="num"><b>26.7</b></td><td class="num">52.5</td><td class="num">2</td><td><span class="pill red">bottleneck</span></td></tr>
+    </tbody>
+  </table>
+  <div class="footnote">
+    <b>Who owns the wait:</b> RLT (18.4h median) and CEO/CFO (26.7h median) are the two bottleneck tiers. Finance (12.1h) likely tied to Net 45-180 reviews. Direct Manager, AVP, Deal Desk, PS, TAM all healthy.
+  </div>
+</div>
+</body>
+</html>

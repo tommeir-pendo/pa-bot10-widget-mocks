@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Deal Desk — Trigger → Approver Tier Sankey</title>
+<style>
+  html, body { margin:0; padding:0; background:#fff; font-family:Inter,-apple-system,Segoe UI,sans-serif; color:#1d2330; height:100%; overflow:hidden; }
+  .mock-banner { background:#fff7ed; border-bottom:1px solid #fed7aa; color:#9a3412; font-size:11px; padding:4px 10px; line-height:1.3; }
+  .mock-banner b { color:#7c2d12; }
+  #chart { width:100%; height: calc(100% - 30px); }
+</style>
+</head>
+<body>
+<div class="mock-banner">
+  <b>CUSTOM-BUILT MOCK — not connected to live data.</b>
+  Pendo has no native sankey widget. Maps approval triggers to the approver tier(s) they route through. To wire live: SF Approval Process metadata + tier map per <code>sf-soql-join-workaround.md</code>.
+</div>
+<div id="chart"></div>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/sankey.js"></script>
+<script>
+Highcharts.chart('chart', {
+  chart: { backgroundColor: '#fff', height: 290, style: { fontFamily: 'Inter' } },
+  title: { text: 'Trigger → Approver Tier routing (mock, last 30d, n=1,097 cycles)', style: { fontSize: '13px', fontWeight: '600' } },
+  credits: { enabled: false },
+  tooltip: { headerFormat: '', pointFormat: '{point.fromNode.name} → {point.toNode.name}: <b>{point.weight}</b>' },
+  series: [{
+    keys: ['from','to','weight'],
+    nodePadding: 4,
+    minLinkWidth: 1,
+    data: [
+      // Standard quotes flow only through Direct Manager
+      ['Standard', 'Direct Manager', 326],
+      // Discount 30-40% → RLT (heavy)
+      ['Discount 30-40%', 'RLT', 142],
+      ['Discount 30-40%', 'VP', 54],
+      // Net 45-180 → Finance (heavy)
+      ['Net 45-180', 'Finance', 120],
+      ['Net 45-180', 'AVP', 54],
+      // Additional Terms → Deal Desk (heavy)
+      ["Add'l Terms", 'Deal Desk', 98],
+      ["Add'l Terms", 'PS', 28],
+      ["Add'l Terms", 'VP', 16],
+      // Custom Subscription Term → VP
+      ['Custom Sub Term', 'VP', 52],
+      ['Custom Sub Term', 'AVP', 36],
+      // Late Renewal → TAM + VP
+      ['Late Renewal', 'TAM', 41],
+      ['Late Renewal', 'VP', 23],
+      // Pendomonium discount → AVP
+      ['Pendomonium disc', 'AVP', 32],
+      ['Pendomonium disc', 'Direct Manager', 9],
+      // 41%+ discount → CEO/CFO
+      ['Discount 41%+', 'CEO/CFO', 38],
+      // GCP Billing → Finance
+      ['GCP Billing', 'Finance', 28]
+    ],
+    type: 'sankey',
+    name: 'Quote routing',
+    colors: ['#10b981','#f59e0b','#f59e0b','#dc2626','#f97316','#fbbf24','#fbbf24','#7f1d1d','#10b981',
+             '#3b82f6','#3b82f6','#3b82f6','#3b82f6','#3b82f6','#3b82f6','#3b82f6','#3b82f6','#3b82f6']
+  }]
+});
+</script>
+</body>
+</html>

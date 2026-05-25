@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Deal Desk — Approval Triggers Bubble</title>
+<style>
+  html, body { margin:0; padding:0; background:#fff; font-family:Inter,-apple-system,Segoe UI,sans-serif; color:#1d2330; height:100%; overflow:hidden; }
+  .mock-banner { background:#fff7ed; border-bottom:1px solid #fed7aa; color:#9a3412; font-size:11px; padding:4px 10px; line-height:1.3; }
+  .mock-banner b { color:#7c2d12; }
+  #chart { width:100%; height: calc(100% - 30px); }
+</style>
+</head>
+<body>
+<div class="mock-banner">
+  <b>CUSTOM-BUILT MOCK — not connected to live data.</b>
+  Volume + median cycle hours per Salesforce-derived trigger. To wire live: SF SOQL join per <code>docs/prds/p4e/deal-desk/sf-soql-join-workaround.md</code>.
+</div>
+<div id="chart"></div>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script>
+Highcharts.chart('chart', {
+  chart: { type: 'packedbubble', backgroundColor: '#fff', height: 290, spacingTop: 6, style: { fontFamily: 'Inter' } },
+  title: { text: 'Approval triggers — volume × median cycle hours (mock)', style: { fontSize: '13px', fontWeight: '600', color:'#1d2330' } },
+  subtitle: { text: 'Bigger + redder = higher volume AND slower. Bubble size = volume. Color = median hrs.', style: {fontSize:'10px', color:'#6b7280'} },
+  credits: { enabled: false },
+  legend: { enabled: false },
+  tooltip: {
+    useHTML: true,
+    pointFormat: '<b>{point.name}</b><br>Volume: {point.value} quotes<br>Median: {point.medianHrs}h<br>P90: {point.p90Hrs}h'
+  },
+  plotOptions: {
+    packedbubble: {
+      minSize: '22%', maxSize: '95%',
+      zMin: 0, zMax: 200,
+      layoutAlgorithm: { splitSeries: false, gravitationalConstant: 0.02 },
+      dataLabels: {
+        enabled: true,
+        format: '{point.name}',
+        style: { color: '#0f172a', textOutline: '1px contrast', fontSize: '10px', fontWeight: '500' },
+        filter: { property: 'value', operator: '>', value: 30 }
+      }
+    }
+  },
+  series: [{
+    name: 'Triggers',
+    data: [
+      { name: 'Standard',           value: 326, medianHrs: 3.8,  p90Hrs: 8,  color: '#10b981' },
+      { name: 'Discount 30-40%',    value: 196, medianHrs: 14.2, p90Hrs: 28, color: '#f59e0b' },
+      { name: 'Net 45-180',         value: 174, medianHrs: 12.8, p90Hrs: 24, color: '#f59e0b' },
+      { name: "Add'l Terms → DD",   value: 142, medianHrs: 22.1, p90Hrs: 41, color: '#dc2626' },
+      { name: 'Custom Sub Term',    value: 88,  medianHrs: 18.5, p90Hrs: 35, color: '#f97316' },
+      { name: 'Late Renewal',       value: 64,  medianHrs: 11.4, p90Hrs: 22, color: '#fbbf24' },
+      { name: 'Pendomonium disc',   value: 41,  medianHrs: 8.2,  p90Hrs: 16, color: '#fbbf24' },
+      { name: 'Discount 41%+',      value: 38,  medianHrs: 32.4, p90Hrs: 58, color: '#7f1d1d' },
+      { name: 'GCP Billing ID',     value: 28,  medianHrs: 7.1,  p90Hrs: 14, color: '#10b981' }
+    ]
+  }]
+});
+</script>
+</body>
+</html>
